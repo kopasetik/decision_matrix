@@ -50,7 +50,11 @@ const MatrixBox = React.createClass({
   render(){
     const categoryNodes = this.state.categories.map((category, index)=>{
       return (
-        <Category categoryTitle={category.name} key={index} />
+        <Category
+          categoryTitle={category.name}
+          key={index}
+          categoryKey={index}
+        />
       )
     })
     return (
@@ -64,12 +68,6 @@ const MatrixBox = React.createClass({
 })
 
 // -TaskList
-// const handleTaskDelete = function (idx, taskId, evt){
-//   evt.preventDefault()
-//   console.log('clarence carter')
-//   this.props.onListTaskDelete(taskId)
-// }
-
 const TaskList = React.createClass({
   handleTaskDelete(taskId){
     this.props.onListTaskDelete(taskId)
