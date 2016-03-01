@@ -102,7 +102,6 @@ const Task = React.createClass({
   },
   handleDeletePress(e){
     e.preventDefault()
-    console.log('pretend delete!')
     this.props.onTaskDelete(this.props.taskKey)
   },
   handleCategoryChange(e){
