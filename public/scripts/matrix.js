@@ -14,14 +14,82 @@ const Label = React.createClass({
 
 
 const Category = React.createClass({
+  getInitialState(){
+    return {}
+  },
+  handleTaskDelete(taskId){
+    this.props.onListTaskDelete(taskId)
+  },
+  handleTaskUpdate(taskId){
+
+  },
   render(){
+    let opts = {}
+    function predicate(condition, test){
+      if (condition){
+        return () => test
+      }
+      return () => true
+    }
+    const taskNodes = this.props.data
+      .filter((task, index) => {
+        return predicate(!this.props.isLast, parseInt(task.category, 10) === index + 1)()
+      })
+      .map((task, index) => {
+        return (
+          <Task
+            author={task.task.author}
+            text={task.task.text}
+            key={task.task.id}
+            taskKey={task.task.id}
+            onTaskDelete={this.handleTaskDelete}
+            category={task.category}
+          />
+        )
+      })
+    if (!this.props.isLast) {
+      return (
+        <div className="category">
+          <h2>{this.props.categoryTitle}</h2>
+          {taskNodes}
+        </div>
+      )
+    }
     return (
       <div className="category">
         <h2>{this.props.categoryTitle}</h2>
+        {taskNodes}
       </div>
     )
   }
 })
+
+// // -TaskList
+// // TaskList and Categories should be the same class
+// // (or one should extend the other)
+// const TaskList = React.createClass({
+//   handleTaskDelete(taskId){
+//     this.props.onListTaskDelete(taskId)
+//   },
+//   render(){
+//     const taskNodes = this.props.data.map((task, index) => {
+//       return (
+//         <Task
+//         author={task.author}
+//         text={task.text}
+//         key={task.id}
+//         taskKey={task.id}
+//         onTaskDelete={this.handleTaskDelete}
+//         />
+//       )
+//     })
+//     return (
+//       <div className="taskList">
+//       {taskNodes}
+//       </div>
+//     )
+//   }
+// })
 
 // -MatrixBox
 const MatrixBox = React.createClass({
@@ -32,65 +100,44 @@ const MatrixBox = React.createClass({
         {name: 'urgent/important'},
         {name: 'non-urgent/important'},
         {name: 'urgent/unimportant'},
-        {name: 'non-urgent/unimportant'}
+        {name: 'non-urgent/unimportant'},
+        {name: 'no label'}
       ]
     }
   },
   handleListTaskDelete(taskId){
     const tasks = this.state.data
-    const newTasks = tasks.filter(task=>(task.id !== taskId))
+    const newTasks = tasks.filter(task=>(task.task.id !== taskId))
     this.setState({data: newTasks})
   },
   handleTaskSubmit(task){
     const tasks = this.state.data
     task.id = Date.now()
-    const newTasks = tasks.concat([task])
+    const newTasks = tasks.concat([{task, category: ''}])
     this.setState({data: newTasks})
   },
   render(){
-    const categoryNodes = this.state.categories.map((category, index)=>{
+    const categoryNodes = this.state.categories.map((category, index, arr)=>{
       return (
         <Category
           categoryTitle={category.name}
           key={index}
           categoryKey={index}
+          onListTaskDelete={this.handleListTaskDelete}
+          isLast={(index + 1 >= arr.length)}
+          data={this.state.data}
         />
       )
     })
     return (
-      <div className="matrix-box">
+      <div className="matrixBox">
         {categoryNodes}
-        <TaskList data={this.state.data} onListTaskDelete={this.handleListTaskDelete} />
         <TaskForm onTaskSubmit={this.handleTaskSubmit} />
       </div>
     )
   }
 })
 
-// -TaskList
-const TaskList = React.createClass({
-  handleTaskDelete(taskId){
-    this.props.onListTaskDelete(taskId)
-  },
-  render(){
-    const taskNodes = this.props.data.map((task, index) => {
-      return (
-        <Task
-          author={task.author}
-          text={task.text}
-          key={task.id}
-          taskKey={task.id}
-          onTaskDelete={this.handleTaskDelete}
-        />
-      )
-    })
-    return (
-      <div className="task-list">
-        {taskNodes}
-      </div>
-    )
-  }
-})
 
 // -Categories (4)
 // (urgent/important, urgent/unimportant, non-urgent/important, non-urgent/unimportant)
@@ -98,7 +145,7 @@ const TaskList = React.createClass({
 // -Tasks
 const Task = React.createClass({
   getInitialState(){
-    return {category: ''}
+    return {}
   },
   handleDeletePress(e){
     e.preventDefault()
@@ -109,9 +156,13 @@ const Task = React.createClass({
   },
   render(){
     let category = this.state.category
-    if(category !== '' && category < 5 && category > 0) {
-      console.log('New value is ' + this.state.category)
-    }
+    if(category !== ''
+        && parseInt(category, 10) < 5
+        && parseInt(category, 10) > 0
+      ) {
+        console.log('New value is ' + this.state.category)
+        console.log(this)
+      }
     return (
       <div className="task">
       {this.props.author}&nbsp;
@@ -154,7 +205,7 @@ const TaskForm = React.createClass({
   },
   render(){
     return (
-      <form className="task-form" onSubmit={this.handleSubmit}>
+      <form className="taskForm" onSubmit={this.handleSubmit}>
         <input
           type="text"
           placeholder="Who are you?"
