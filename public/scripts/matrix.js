@@ -4,10 +4,10 @@ const MatrixBox = React.createClass({
     return {
       taskData: [],
       categoryData: [
-        {name: 'urgent/important (1)'},
-        {name: 'non-urgent/important (2)'},
-        {name: 'urgent/unimportant (3)'},
-        {name: 'non-urgent/unimportant (4)'},
+        {name: '(1) urgent/important'},
+        {name: '(2) non-urgent/important'},
+        {name: '(3) urgent/unimportant'},
+        {name: '(4) non-urgent/unimportant'},
         {name: 'no label'}
       ]}
   },
@@ -65,32 +65,28 @@ const Category = React.createClass({
     this.props.onListTaskChange(taskId, categoryId)
   },
   render(){
-    let opts = {}
-    function predicate(condition, test){
-      if (condition){
-        return () => test
-      }
-      return () => true
-    }
     const taskNodes = this.props.data
-      // .filter((task, index) => {
-      //   return predicate(
-      //     !this.props.isLast,
-      //     parseInt(task.task.category, 10) === index + 1)()
-      // })
-      .map((task, index) => {
-        return (
-          <Task
-            author={task.task.author}
-            text={task.task.text}
-            key={task.task.id}
-            taskKey={task.task.id}
-            onTaskChange={this.handleTaskChange}
-            onTaskDelete={this.handleTaskDelete}
-            category={task.task.category}
-          />
-        )
-      })
+        .map((task, index) => {
+          const category = parseInt(task.task.category, 10) || '#'
+          console.log(`Task Category: ${category}; This Category: ${this.props.categoryKey}`)
+          return (
+            <Task
+              author={task.task.author}
+              text={task.task.text}
+              key={task.task.id}
+              taskKey={task.task.id}
+              onTaskChange={this.handleTaskChange}
+              onTaskDelete={this.handleTaskDelete}
+              itemCategory={category}
+              hide={
+                (category !==
+                  (this.props.categoryKey + 1) &&
+                  !this.props.isLast) ||
+                (this.props.isLast && category > 0 && category < 5)
+              }
+            />
+          )
+        })
     return (
       <div className="category">
         <h2>{this.props.categoryTitle}</h2>
@@ -107,17 +103,11 @@ const Task = React.createClass({
     this.props.onTaskDelete(this.props.taskKey)
   },
   handleCategoryChange(e){
-    this.setState({category: e.target.value})
     this.props.onTaskChange(this.props.taskKey, e.target.value)
   },
   render(){
-    let category = this.props.category
-    if(category !== ''
-        && parseInt(category, 10) < 5
-        && parseInt(category, 10) > 0
-      ) {
-        console.log('New value is ' + this.props.category)
-      }
+    // let category = this.props.itemCategory
+    if(this.props.hide) return (null)
     return (
       <div className="task">
       {this.props.author}&nbsp;
@@ -127,7 +117,7 @@ const Task = React.createClass({
         <input
           type="text"
           placeholder="Category #"
-          value={this.props.category}
+          value={this.props.itemCategory}
           onChange={this.handleCategoryChange}
           maxLength="1"
         />
@@ -155,7 +145,7 @@ const TaskForm = React.createClass({
       author = this.state.author.trim(),
       text = this.state.text.trim()
     if(!author || !text) return
-    this.props.onTaskSubmit({author, text})
+    this.props.onTaskSubmit({author, text, category: '#'})
     this.setState({author: '', text: ''})
   },
   render(){
