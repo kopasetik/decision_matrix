@@ -86,7 +86,7 @@ const Category = React.createClass({
           )
         })
     return (
-      <div className="category">
+      <div className={'category' + (this.props.isLast ? ' last': ' quadrantBox')}>
         <h2>{this.props.categoryTitle}</h2>
         {taskNodes}
       </div>
