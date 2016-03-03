@@ -148,21 +148,23 @@ const TaskForm = React.createClass({
   },
   render(){
     return (
-      <form className="taskForm" onSubmit={this.handleSubmit}>
-        <input
-          type="text"
-          placeholder="Who are you?"
-          value={this.state.author}
-          onChange={this.handleAuthorChange}
-        />
-        <input
-          type="text"
-          placeholder="Whaddaya got to say?"
-          value={this.state.text}
-          onChange={this.handleTextChange}
-        />
-        <input type="submit" value="Add Task" />
-      </form>
+      <div className="taskForm">
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            placeholder="Who are you?"
+            value={this.state.author}
+            onChange={this.handleAuthorChange}
+          />
+          <input
+            type="text"
+            placeholder="Whaddaya got to say?"
+            value={this.state.text}
+            onChange={this.handleTextChange}
+          />
+          <input type="submit" value="Add Task" />
+        </form>
+      </div>
     )
   }
 })
