@@ -71,6 +71,22 @@ ul {
     width: 45%;
 }
 
+.category.quadrantBox:nth-of-type(1) {
+    background-color: #EF4747;
+}
+
+.category.quadrantBox:nth-of-type(2) {
+    background-color: #EF9347;
+}
+
+.category.quadrantBox:nth-of-type(3) {
+    background-color: #2B8F8F;
+}
+
+.category.quadrantBox:nth-of-type(4) {
+    background-color: #39BF39;
+}
+
 .category.last {
     width: 100%;
 }
