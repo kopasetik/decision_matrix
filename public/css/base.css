@@ -60,3 +60,17 @@ p, ul {
 ul {
   padding-left: 30px;
 }
+
+.category.quadrantBox {
+    width: 45%;
+}
+
+.category.last {
+    width: 100%;
+}
+
+.matrixBox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
