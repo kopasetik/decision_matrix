@@ -1,27 +1,11 @@
-// Define the default values for:
-// 1) Categories
-// 2) Tasks
-// 3) Labels
-
-// how does the matrix come together?
-// it has a few components
-// -Labels
-const Label = React.createClass({
-  render(){
-    return (<label></label>)
-  }
-})
-
-
+// -Categories (4)
+// (urgent/important, urgent/unimportant, non-urgent/important, non-urgent/unimportant)
 const Category = React.createClass({
-  getInitialState(){
-    return {}
-  },
   handleTaskDelete(taskId){
     this.props.onListTaskDelete(taskId)
   },
-  handleTaskUpdate(taskId){
-
+  handleTaskChange(taskId, categoryId){
+    this.props.onListTaskChange(taskId, categoryId)
   },
   render(){
     let opts = {}
@@ -32,9 +16,11 @@ const Category = React.createClass({
       return () => true
     }
     const taskNodes = this.props.data
-      .filter((task, index) => {
-        return predicate(!this.props.isLast, parseInt(task.category, 10) === index + 1)()
-      })
+      // .filter((task, index) => {
+      //   return predicate(
+      //     !this.props.isLast,
+      //     parseInt(task.category, 10) === index + 1)()
+      // })
       .map((task, index) => {
         return (
           <Task
@@ -42,19 +28,12 @@ const Category = React.createClass({
             text={task.task.text}
             key={task.task.id}
             taskKey={task.task.id}
+            onTaskChange={this.handleTaskChange}
             onTaskDelete={this.handleTaskDelete}
             category={task.category}
           />
         )
       })
-    if (!this.props.isLast) {
-      return (
-        <div className="category">
-          <h2>{this.props.categoryTitle}</h2>
-          {taskNodes}
-        </div>
-      )
-    }
     return (
       <div className="category">
         <h2>{this.props.categoryTitle}</h2>
@@ -64,68 +43,51 @@ const Category = React.createClass({
   }
 })
 
-// // -TaskList
-// // TaskList and Categories should be the same class
-// // (or one should extend the other)
-// const TaskList = React.createClass({
-//   handleTaskDelete(taskId){
-//     this.props.onListTaskDelete(taskId)
-//   },
-//   render(){
-//     const taskNodes = this.props.data.map((task, index) => {
-//       return (
-//         <Task
-//         author={task.author}
-//         text={task.text}
-//         key={task.id}
-//         taskKey={task.id}
-//         onTaskDelete={this.handleTaskDelete}
-//         />
-//       )
-//     })
-//     return (
-//       <div className="taskList">
-//       {taskNodes}
-//       </div>
-//     )
-//   }
-// })
-
 // -MatrixBox
 const MatrixBox = React.createClass({
   getInitialState(){
     return {
-      data: [],
-      categories: [
-        {name: 'urgent/important'},
-        {name: 'non-urgent/important'},
-        {name: 'urgent/unimportant'},
-        {name: 'non-urgent/unimportant'},
+      taskData: [],
+      categoryData: [
+        {name: 'urgent/important (1)'},
+        {name: 'non-urgent/important (2)'},
+        {name: 'urgent/unimportant (3)'},
+        {name: 'non-urgent/unimportant (4)'},
         {name: 'no label'}
-      ]
-    }
+      ]}
   },
   handleListTaskDelete(taskId){
-    const tasks = this.state.data
-    const newTasks = tasks.filter(task=>(task.task.id !== taskId))
-    this.setState({data: newTasks})
+    const tasks = this.state.taskData
+    const newTasks = tasks.filter(task => (task.task.id !== taskId))
+    this.setState({taskData: newTasks})
+  },
+  handleListTaskChange(taskId, categoryId){
+    const tasks = this.state.taskData
+    const newTasks = tasks.map(task => {
+      if (task.task.id !== taskId) return task
+      task.task.category = categoryId
+      return task
+    })
+    this.setState({taskData: newTasks})
   },
   handleTaskSubmit(task){
-    const tasks = this.state.data
+    const tasks = this.state.taskData
     task.id = Date.now()
     const newTasks = tasks.concat([{task, category: ''}])
-    this.setState({data: newTasks})
+    this.setState({taskData: newTasks})
   },
   render(){
-    const categoryNodes = this.state.categories.map((category, index, arr)=>{
+    console.log(this.state.taskData)
+    const categoryNodes = this.state.categoryData.map((category, index, arr)=>{
       return (
         <Category
           categoryTitle={category.name}
           key={index}
           categoryKey={index}
           onListTaskDelete={this.handleListTaskDelete}
+          onListTaskChange={this.handleListTaskChange}
           isLast={(index + 1 >= arr.length)}
-          data={this.state.data}
+          data={this.state.taskData}
         />
       )
     })
@@ -138,14 +100,10 @@ const MatrixBox = React.createClass({
   }
 })
 
-
-// -Categories (4)
-// (urgent/important, urgent/unimportant, non-urgent/important, non-urgent/unimportant)
-
 // -Tasks
 const Task = React.createClass({
   getInitialState(){
-    return {}
+    return {category: ''}
   },
   handleDeletePress(e){
     e.preventDefault()
@@ -153,6 +111,7 @@ const Task = React.createClass({
   },
   handleCategoryChange(e){
     this.setState({category: e.target.value})
+    this.props.onTaskChange(this.props.taskKey, e.target.value)
   },
   render(){
     let category = this.state.category
@@ -161,7 +120,6 @@ const Task = React.createClass({
         && parseInt(category, 10) > 0
       ) {
         console.log('New value is ' + this.state.category)
-        console.log(this)
       }
     return (
       <div className="task">
@@ -171,7 +129,7 @@ const Task = React.createClass({
         <button>Delete</button>&nbsp;
         <input
           type="text"
-          placeholder="#"
+          placeholder="Category #"
           value={this.state.category}
           onChange={this.handleCategoryChange}
           maxLength="1"
