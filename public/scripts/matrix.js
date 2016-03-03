@@ -32,7 +32,6 @@ const MatrixBox = React.createClass({
     this.setState({taskData: newTasks})
   },
   render(){
-    console.log(this.state.taskData)
     const categoryNodes = this.state.categoryData.map((category, index, arr)=>{
       return (
         <Category
