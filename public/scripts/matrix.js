@@ -68,7 +68,6 @@ const Category = React.createClass({
     const taskNodes = this.props.data
         .map((task, index) => {
           const category = parseInt(task.task.category, 10) || '#'
-          console.log(`Task Category: ${category}; This Category: ${this.props.categoryKey}`)
           return (
             <Task
               author={task.task.author}
