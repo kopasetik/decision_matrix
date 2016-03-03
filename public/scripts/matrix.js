@@ -104,7 +104,6 @@ const Task = React.createClass({
     this.props.onTaskChange(this.props.taskKey, e.target.value)
   },
   render(){
-    // let category = this.props.itemCategory
     if(this.props.hide) return (null)
     return (
       <div className="task">
