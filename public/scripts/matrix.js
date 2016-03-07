@@ -162,6 +162,7 @@ const TaskForm = React.createClass({
             value={this.state.text}
             onChange={this.handleTextChange}
           />
+          <input type="date" />
           <input type="submit" value="Add Task" />
         </form>
       </div>
