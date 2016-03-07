@@ -111,7 +111,6 @@ const Task = React.createClass({
       {this.props.author}&nbsp;
       {this.props.text}&nbsp;
       <form onSubmit={this.handleDeletePress}>
-        <button>Delete</button>&nbsp;
         <input
           type="text"
           placeholder="Category #"
@@ -119,6 +118,7 @@ const Task = React.createClass({
           onChange={this.handleCategoryChange}
           maxLength="1"
         />
+        <button>Delete</button>&nbsp;
       </form>
       &nbsp;
       </div>
