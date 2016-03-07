@@ -61,6 +61,13 @@ ul {
   padding-left: 30px;
 }
 
+input[type="date"]::-webkit-inner-spin-button,
+input[type=date]::-webkit-outer-spin-button {
+    display: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 .matrixBox {
   display: flex;
   flex-wrap: wrap;
