@@ -162,7 +162,10 @@ const TaskForm = React.createClass({
             value={this.state.text}
             onChange={this.handleTextChange}
           />
-          <input type="date" />
+          <input
+            type="date"
+            defaultValue={(()=>(new Date().toISOString()))().slice(0,10)}
+          />
           <input type="submit" value="Add Task" />
         </form>
       </div>
