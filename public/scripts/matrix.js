@@ -129,13 +129,21 @@ const Task = React.createClass({
 // -TaskForm
 const TaskForm = React.createClass({
   getInitialState(){
-    return {author: '', text: ''}
+    return {
+      author: '',
+      text: '',
+      date: (()=>(new Date().toISOString()))().slice(0,10)
+    }
   },
   handleAuthorChange(e){
     this.setState({author: e.target.value})
   },
   handleTextChange(e){
     this.setState({text: e.target.value})
+  },
+  handleDateChange(e){
+    console.log(e.target.value)
+    this.setState({date: e.target.value})
   },
   handleSubmit(e){
     e.preventDefault()
@@ -164,7 +172,8 @@ const TaskForm = React.createClass({
           />
           <input
             type="date"
-            defaultValue={(()=>(new Date().toISOString()))().slice(0,10)}
+            value={this.state.date}
+            onChange={this.handleDateChange}
           />
           <input type="submit" value="Add Task" />
         </form>
