@@ -132,9 +132,10 @@ const TaskForm = React.createClass({
     return {
       author: '',
       text: '',
-      date: (()=>(new Date().toISOString()))().slice(0,10)
+      date: this.todaysDate
     }
   },
+  todaysDate: (()=>(new Date().toISOString()))().slice(0,10),
   handleAuthorChange(e){
     this.setState({author: e.target.value})
   },
