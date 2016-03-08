@@ -153,7 +153,11 @@ const TaskForm = React.createClass({
       text = this.state.text.trim()
     if(!author || !text) return
     this.props.onTaskSubmit({author, text, category: '#'})
-    this.setState({author: '', text: ''})
+    this.setState({
+      author: '',
+      text: '',
+      date: this.todaysDate
+    })
   },
   render(){
     return (
