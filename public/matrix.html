@@ -13,10 +13,14 @@
   </head>
   <body>
     <div id="content"></div>
+    <script type="text/babel" src="scripts/matrixBox.js"></script>
     <script type="text/babel" src="scripts/matrix.js"></script>
     <script type="text/babel">
-      // To get started with this tutorial running your own code, simply remove
-      // the script tag loading scripts/example.js and start writing code here.
+      // ReactDOM render the stuff
+      ReactDOM.render(
+        <MatrixBox />,
+        document.getElementById('content')
+      )
     </script>
   </body>
 </html>
