@@ -72,6 +72,7 @@ const Category = React.createClass({
             <Task
               author={task.task.author}
               text={task.task.text}
+              date={task.task.date}
               key={task.task.id}
               taskKey={task.task.id}
               onTaskChange={this.handleTaskChange}
@@ -110,6 +111,7 @@ const Task = React.createClass({
       <div className="task">
       {this.props.author}&nbsp;
       {this.props.text}&nbsp;
+      {this.props.date}&nbsp;
       <form onSubmit={this.handleDeletePress}>
         <input
           type="text"
@@ -150,9 +152,10 @@ const TaskForm = React.createClass({
     e.preventDefault()
     let
       author = this.state.author.trim(),
-      text = this.state.text.trim()
+      text = this.state.text.trim(),
+      date = this.state.date.slice(5,10)
     if(!author || !text) return
-    this.props.onTaskSubmit({author, text, category: '#'})
+    this.props.onTaskSubmit({author, text, category: '#', date})
     this.setState({
       author: '',
       text: '',
