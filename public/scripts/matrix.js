@@ -111,7 +111,7 @@ const Task = React.createClass({
       <div className="task">
       {this.props.author}&nbsp;
       {this.props.text}&nbsp;
-      {this.props.date}&nbsp;
+      Due date:&nbsp;{this.props.date}&nbsp;
       <form onSubmit={this.handleDeletePress}>
         <input
           type="text"
