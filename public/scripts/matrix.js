@@ -2,7 +2,7 @@
 const MatrixBox = React.createClass({
   getInitialState(){
     return {
-      taskData: JSON.parse(localStorage.getItem('taskData')),
+      taskData: JSON.parse(localStorage.getItem('taskData')) || [],
       categoryData: [
         {name: '(1) urgent/important'},
         {name: '(2) non-urgent/important'},
