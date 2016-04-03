@@ -1,7 +1,7 @@
 {
   "name": "decision_matrix",
   "version": "0.0.0",
-  "description": "Code from the React tutorial.",
+  "description": "Make better decisions :-)",
   "main": "server.js",
   "dependencies": {
     "body-parser": "^1.4.3",
