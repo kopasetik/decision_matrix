@@ -22,9 +22,9 @@
     "comment",
     "example"
   ],
-  "author": "petehunt",
+  "author": "kopasetik",
   "bugs": {
-    "url": "https://github.com/reactjs/react-tutorial/issues"
+    "url": "https://github.com/kopasetik/decision_matrix/issues"
   },
   "homepage": "https://github.com/reactjs/react-tutorial",
   "engines" : {
